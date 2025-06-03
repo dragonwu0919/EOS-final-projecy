@@ -12,11 +12,6 @@
 static char pipe_path[128]; // Named Pipe 的路徑
 static int pipe_fd = -1;    // Named Pipe 的文件描述符
 
-// 餐點名稱表
-static const char *menu_names[] = {
-    "Fried Rice", "Noodles", "Soup", "Salad", "Pizza", "Burger", "Steak", "Sushi", "Pasta", "Curry"
-};
-
 // 信號處理函數，用於清理 Named Pipe
 void cleanup_pipe(int sig) {
     if (pipe_fd != -1) {
@@ -65,7 +60,7 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < num_menu_items; i++) {
             struct order o = {
                 .order_id = order_id,
-                .menu_idx = rand() % 10, // 隨機生成 menu_id (0~9)
+                .menu_idx = rand() % 9 // 隨機生成 menu_id (0~9)
             };
             strncpy(o.name, menu_names[o.menu_idx], sizeof(o.name) - 1);
 

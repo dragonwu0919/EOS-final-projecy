@@ -27,5 +27,10 @@ int add_order(struct order *o);
 /* 從佇列取出一筆訂單，若無訂單則阻塞 */
 struct order *recv_order(void);
 
+static const char *menu_names[] = {
+    "Cucumber roll", "Sashimi", "Fish roll", "Cucumber Salad", "Tomato Salad",
+    "Tomato Cucumber Salad", "Green Tea", "Black Tea", "Oolong Tea"
+};
+
 #endif // ORDER_COMM_H
 
