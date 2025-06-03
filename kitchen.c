@@ -39,8 +39,6 @@ static DEFINE_MUTEX(order_done_mutex);
 static struct task_struct *dispatch_thread;
 static int dispatch_thread_fn(void *data);
 
-void write_task_to_chef_device(int order_id, int dish_id, int step, int x, int y);
-void wait_for_completion_from_gui(void);
 void get_step_position(const char* step_name, int *x, int *y);
 
 /* 各工作區的信號量 */
@@ -494,28 +492,6 @@ static struct miscdevice task_dev = {
     .fops = &task_fops,
 };
 
-// 發送任務給 GUI
-void write_task_to_chef_device(int order_id, int dish_id, int step, int x, int y)
-{
-    current_task.order_id = order_id;
-    current_task.dish_id = dish_id;
-    current_task.step = step;
-    current_task.position_x = x;
-    current_task.position_y = y;
-    current_task.completed = 0;
-
-    pr_info("[kernel] Send task to GUI: order=%d step=%d pos=(%d,%d)\n",
-            order_id, step, x, y);
-
-    task_ready = 1;
-    wake_up(&task_wq);
-}
-
-// 等待 GUI 完成回報
-void wait_for_completion_from_gui(void)
-{
-    wait_event(task_wq, current_task.completed == 1);
-}
 
 static int __init kitchen_task_init(void)
 {
