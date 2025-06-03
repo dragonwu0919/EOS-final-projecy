@@ -701,7 +701,7 @@ static int dispatch_thread_fn(void *data) {
 
 static int __init kitchen_init(void)
 {
-    connect_to_vm_monitor("192.168.222.150", 8888);  // ← 替換成 VM IP
+    connect_to_vm_monitor("192.168.222.100", 8888);  // ← 替換成 VM IP
     mutex_init(&dispatch_lock);
     dispatch_thread = kthread_run(dispatch_thread_fn, NULL, "dispatch_thread");
 

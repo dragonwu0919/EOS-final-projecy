@@ -8,7 +8,7 @@ LDFLAGS =
 CROSS_COMPILE = aarch64-linux-gnu-
 
 # 指定 Linux kernel source tree
-KDIR := /home/ericwang/linux
+KDIR := /home/dragonwu0919/Projects/EOS_25sp
 PWD  := $(shell pwd)
 
 # 這裡列出你要 build 的模組檔（.c）
@@ -19,16 +19,12 @@ all:
 	$(MAKE) -C $(KDIR) $(CFLAGS) ARCH=arm64 M=$(PWD) CROSS_COMPILE=$(CROSS_COMPILE) modules
 
 # 清理編譯產物
-# clean:
-# 	$(MAKE) -C $(KDIR) ARCH=arm64 M=$(PWD) clean
+clean:
+	$(MAKE) -C $(KDIR) ARCH=arm64 M=$(PWD) clean
 
 
 sync:
-	scp /home/ericwang/project/gui.c ericwang@192.168.222.222:/home/ericwang/project
-	scp /home/ericwang/project/kitchen.ko ericwang@192.168.222.222:/home/ericwang/project
-	scp /home/ericwang/project/order_send.ko ericwang@192.168.222.222:/home/ericwang/project
-	scp /home/ericwang/project/order_receive.ko ericwang@192.168.222.222:/home/ericwang/project
-	scp /home/ericwang/project/demo.sh ericwang@192.168.222.222:/home/ericwang/project
+	scp /home/dragonwu0919/Projects/EOS-final-projecy/* dragonwu0919@192.168.222.222:/home/dragonwu0919/Project
 
 
 gui:
@@ -39,5 +35,5 @@ dev_simulator:
 	gcc -Wall dev_simulator.c -o dev_simulator -lncurses -g
 	objdump -d dev_simulator > $@.a
 
-clean:
-	rm dev_simulator dev_simulator.a gui gui.a
+net:
+	gcc netlink_listener.c -o netListener
