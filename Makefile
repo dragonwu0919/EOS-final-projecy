@@ -1,39 +1,29 @@
-# 設定交叉編譯器和相關選項
-CROSS_COMPILE = aarch64-linux-gnu-
-CC = $(CROSS_COMPILE)gcc
-CFLAGS = -Wall -Wextra -Werror
+CC = gcc
+CFLAGS = -Wall -Wextra -O2
 LDFLAGS =
 
-# 設定交叉編譯器與架構
-CROSS_COMPILE = aarch64-linux-gnu-
+SRC = kitchenImp.c netlink_listener.c order_named_pipe.c read_named_pipe.c
+OBJ = $(SRC:.c=.o)
+TARGETS = netlink_listener order_named_pipe read_named_pipe
 
-# 指定 Linux kernel source tree
-KDIR := /home/dragonwu0919/Projects/EOS_25sp
-PWD  := $(shell pwd)
+.PHONY: all clean
 
-# 這裡列出你要 build 的模組檔（.c）
-obj-m := kitchen.o order_receive.o order_send.o
+all: $(TARGETS)
 
-# 預設目標：編譯所有模組
-all:
-	$(MAKE) -C $(KDIR) $(CFLAGS) ARCH=arm64 M=$(PWD) CROSS_COMPILE=$(CROSS_COMPILE) modules
+kitchenImp: kitchenImp.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-# 清理編譯產物
+netlink_listener: netlink_listener.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+order_named_pipe: order_named_pipe.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+read_named_pipe: read_named_pipe.o
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	$(MAKE) -C $(KDIR) ARCH=arm64 M=$(PWD) clean
-
-
-sync:
-	scp /home/dragonwu0919/Projects/EOS-final-projecy/* dragonwu0919@192.168.222.222:/home/dragonwu0919/Project
-
-
-gui:
-	gcc -Wall gui.c -o gui -lncurses -g
-	objdump -d gui > $@.a
-
-dev_simulator:
-	gcc -Wall dev_simulator.c -o dev_simulator -lncurses -g
-	objdump -d dev_simulator > $@.a
-
-net:
-	gcc netlink_listener.c -o netListener
+	rm -f $(OBJ) $(TARGETS)
